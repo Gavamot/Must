@@ -26,7 +26,7 @@ namespace ConsoleApp6
             var watch = new Stopwatch();
             int sleep = 60;
             int sleepCount = 5;
-            var must = new Must(sleep); 
+            var must = new Must(sleep);
             await must.Exec(token =>
             {
                 if (!watch.IsRunning) 

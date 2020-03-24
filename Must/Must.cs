@@ -18,17 +18,17 @@ namespace ConsoleApp6
             this.Token = token;
         }
 
-        public Task<T> ExecAttempts<T>(Func<T> func, int attempts, int errorSleepMs = -1) => 
-            ExecAttempts(token => func(), attempts, errorSleepMs);
+        public async Task<T> ExecAttempts<T>(Func<T> func, int attempts, int errorSleepMs = -1) => 
+           await ExecAttempts(token => func(), attempts, errorSleepMs);
 
-        public Task ExecAttempts(Action action, int attempts, int errorSleepMs = -1) =>
-            ExecAttempts(token => action(), attempts, errorSleepMs);
+        public async Task ExecAttempts(Action action, int attempts, int errorSleepMs = -1) =>
+            await ExecAttempts(token => action(), attempts, errorSleepMs);
 
-        public Task<T> Exec<T>(Func<T> func, int errorSleepMs = -1) =>
-            Exec(token => func(), errorSleepMs);
+        public async Task<T> Exec<T>(Func<T> func, int errorSleepMs = -1) =>
+            await Exec(token => func(), errorSleepMs);
 
-        public Task Exec(Action action, int errorSleepMs = -1) =>
-            Exec(token => action(), errorSleepMs);
+        public async Task Exec(Action action, int errorSleepMs = -1) =>
+            await Exec(token => action(), errorSleepMs);
 
         /// <exception cref="AttemptsOverException">Task was canceled</exception>
         /// <exception cref="TaskCanceledException">Task was canceled</exception>
