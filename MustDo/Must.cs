@@ -17,18 +17,6 @@ namespace MustDo
             this.Token = token;
         }
 
-        public async Task<T> ExecAttempts<T>(Func<T> func, int attempts, int errorSleepMs = -1) => 
-           await ExecAttempts(token => func(), attempts, errorSleepMs);
-
-        public async Task ExecAttempts(Action action, int attempts, int errorSleepMs = -1) =>
-            await ExecAttempts(token => action(), attempts, errorSleepMs);
-
-        public async Task<T> Exec<T>(Func<T> func, int errorSleepMs = -1) =>
-            await Exec(token => func(), errorSleepMs);
-
-        public async Task Exec(Action action, int errorSleepMs = -1) =>
-            await Exec(token => action(), errorSleepMs);
-
         /// <exception cref="AttemptsOverException">Task was canceled</exception>
         /// <exception cref="TaskCanceledException">Task was canceled</exception>
         public async Task<T> ExecAttempts<T>(Func<CancellationToken, T> func, int attempts, int errorSleepMs = -1)
@@ -84,6 +72,72 @@ namespace MustDo
             }
         }
 
+        /// <exception cref="AttemptsOverException">Task was canceled</exception>
+        /// <exception cref="TaskCanceledException">Task was canceled</exception>
+        public async Task ExecAttempts(Action action, int attempts, int errorSleepMs = -1) =>
+            await ExecAttempts(token => action(), attempts, errorSleepMs);
+
+
+        /// <exception cref="AttemptsOverException">Task was canceled</exception>
+        /// <exception cref="TaskCanceledException">Task was canceled</exception>
+        public async Task ExecAttempts(Task action, int attempts, int errorSleepMs = -1)
+        {
+            errorSleepMs = GetErrorSleepMs(errorSleepMs);
+            while (true)
+            {
+                try
+                {
+                    await action;
+                    break;
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    OnError(e);
+                    if (--attempts <= 0)
+                    {
+                        throw new AttemptsOverException(e);
+                    }
+                    await Task.Delay(errorSleepMs, Token);
+                }
+            }
+        }
+
+        /// <exception cref="AttemptsOverException">Task was canceled</exception>
+        /// <exception cref="TaskCanceledException">Task was canceled</exception>
+        public async Task<T> ExecAttempts<T>(Func<Task<T>> func, int attempts, int errorSleepMs = -1)
+        {
+            errorSleepMs = GetErrorSleepMs(errorSleepMs);
+            while (true)
+            {
+                try
+                {
+                    return await func();
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    OnError(e);
+                    if (--attempts <= 0)
+                    {
+                        throw new AttemptsOverException(e);
+                    }
+                    await Task.Delay(errorSleepMs, Token);
+                }
+            }
+        }
+
+
+        /// <exception cref="TaskCanceledException">Task was canceled</exception>
+        public async Task Exec(Action action, int errorSleepMs = -1) =>
+            await Exec(token => action(), errorSleepMs);
+
         /// <exception cref="TaskCanceledException">Task was canceled</exception>
         public async Task<T> Exec<T>(Func<CancellationToken, T> func, int errorSleepMs = -1)
         {
@@ -128,6 +182,52 @@ namespace MustDo
                 }
             }
         }
+
+        /// <exception cref="TaskCanceledException">Task was canceled</exception>
+        public async Task Exec(Task action, int errorSleepMs = -1)
+        {
+            errorSleepMs = GetErrorSleepMs(errorSleepMs);
+            while (true)
+            {
+                try
+                {
+                    await action;
+                    break;
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    OnError(e);
+                    await Task.Delay(errorSleepMs, Token);
+                }
+            }
+        }
+
+        /// <exception cref="TaskCanceledException">Task was canceled</exception>
+        public async Task<T> Exec<T>(Func<Task<T>> func, int errorSleepMs = -1)
+        {
+            errorSleepMs = GetErrorSleepMs(errorSleepMs);
+            while (true)
+            {
+                try
+                {
+                    return await func();
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    OnError(e);
+                    await Task.Delay(errorSleepMs, Token);
+                }
+            }
+        }
+
 
         private int GetErrorSleepMs(int errorSleepMs)
         {

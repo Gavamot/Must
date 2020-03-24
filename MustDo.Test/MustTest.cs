@@ -11,6 +11,7 @@ namespace MustDo.Test
     public class MustTest
     {
         static int step = 0;
+        private const int Value = 1;
         private CancellationTokenSource source;
         [SetUp]
         public void BeforeTest()
@@ -116,7 +117,7 @@ namespace MustDo.Test
                 var t = must.Exec(token =>
                 {
                     throw new Exception();
-                    return 1;
+                    return Value;
                 });
                 Task.Run(() => source.Cancel());
                 try
@@ -142,13 +143,25 @@ namespace MustDo.Test
             {
                 if (step++ < sleepCount)
                     throw new Exception(step.ToString());
-                return 1;
+                return Value;
             }, 1);
 
             for (int i = 0; i < sleepCount; i++)
             {
                 Assert.AreEqual(log[i], (i + 1).ToString());
             }
+        }
+
+        [Test]
+        public async Task Exec_FuncTaskCalls()
+        {
+            var must = new Must(0, source.Token);
+            var res = await must.Exec(async () =>
+            {
+                await Task.Delay(1);
+                return Value;
+            }, 10);
+            Assert.AreEqual(res, Value);
         }
 
         #endregion
@@ -161,7 +174,6 @@ namespace MustDo.Test
             var watch = new Stopwatch();
             int sleep = 60;
             int sleepCount = 5;
-            int value = 1;
             var must = new Must(sleep);
             int res = await must.ExecAttempts(token =>
             {
@@ -170,9 +182,9 @@ namespace MustDo.Test
                 if (step++ < sleepCount)
                     throw new Exception();
                 watch.Stop();
-                return value;
+                return Value;
             }, 100, sleep);
-            Assert.AreEqual(value, res);
+            Assert.AreEqual(Value, res);
             Assert.IsTrue(watch.ElapsedMilliseconds >= sleep * sleepCount);
         }
 
@@ -183,7 +195,6 @@ namespace MustDo.Test
             {
                 int sleep = 60;
                 int sleepCount = 5;
-                int value = 1;
                 var must = new Must(sleep);
                 try
                 {
@@ -191,7 +202,7 @@ namespace MustDo.Test
                     {
                         if (step++ < sleepCount)
                             throw new Exception();
-                        return value;
+                        return Value;
                     }, sleepCount - 1, sleep).Result;
                 }
                 catch (AggregateException e)
@@ -210,7 +221,7 @@ namespace MustDo.Test
                 var t = must.ExecAttempts(token =>
                 {
                     throw new Exception();
-                    return 1;
+                    return Value;
                 }, int.MaxValue);
                 Task.Run(() => source.Cancel());
                 try
@@ -243,6 +254,19 @@ namespace MustDo.Test
             {
                 Assert.AreEqual(log[i], (i + 1).ToString());
             }
+        }
+
+        [Test]
+        public async Task ExecAttempts_FuncTaskCalls()
+        {
+            var must = new Must(0, source.Token);
+          
+            var res = await must.ExecAttempts(async () =>
+            {
+                await Task.Delay(1);
+                return Value;
+            }, 10);
+            Assert.AreEqual(res, Value);
         }
 
         #endregion
@@ -334,7 +358,15 @@ namespace MustDo.Test
             }
         }
 
+        [Test]
+        public async Task ExecAttempts_ActionTaskCalls()
+        {
+            var must = new Must(0, source.Token);
+            await must.ExecAttempts(async () => await Task.Delay(1), 10);
+        }
+
         #endregion
+
 
     }
 }
