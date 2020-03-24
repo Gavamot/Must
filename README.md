@@ -3,6 +3,7 @@ The library for realize repeatable action in C#
 
 Excaples : 
 
+```csharp
 ---------------------------------------------------------------
 
 int errorSleepMs = 100;
@@ -30,3 +31,5 @@ catch(TaskCanceledException e){
 }catch(AttemptsOverException){
   
 }
+
+```
