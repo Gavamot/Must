@@ -1,8 +1,0 @@
-C:\Projects\Must\Must\bin\Debug\netcoreapp3.1\Must.deps.json
-C:\Projects\Must\Must\bin\Debug\netcoreapp3.1\Must.dll
-C:\Projects\Must\Must\bin\Debug\netcoreapp3.1\Must.pdb
-C:\Projects\Must\Must\obj\Debug\netcoreapp3.1\Must.csprojAssemblyReference.cache
-C:\Projects\Must\Must\obj\Debug\netcoreapp3.1\Must.AssemblyInfoInputs.cache
-C:\Projects\Must\Must\obj\Debug\netcoreapp3.1\Must.AssemblyInfo.cs
-C:\Projects\Must\Must\obj\Debug\netcoreapp3.1\Must.dll
-C:\Projects\Must\Must\obj\Debug\netcoreapp3.1\Must.pdb

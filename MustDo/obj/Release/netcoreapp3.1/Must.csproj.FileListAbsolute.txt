@@ -1,0 +1,7 @@
+C:\Projects\Must\Must\obj\Release\netcoreapp3.1\Must.AssemblyInfoInputs.cache
+C:\Projects\Must\Must\obj\Release\netcoreapp3.1\Must.AssemblyInfo.cs
+C:\Projects\Must\Must\bin\Release\netcoreapp3.1\MustDo.deps.json
+C:\Projects\Must\Must\bin\Release\netcoreapp3.1\MustDo.dll
+C:\Projects\Must\Must\bin\Release\netcoreapp3.1\MustDo.pdb
+C:\Projects\Must\Must\obj\Release\netcoreapp3.1\MustDo.dll
+C:\Projects\Must\Must\obj\Release\netcoreapp3.1\MustDo.pdb
