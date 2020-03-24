@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
 namespace ConsoleApp6
 {
@@ -16,6 +17,18 @@ namespace ConsoleApp6
             this.DefaultErrorSleepMs = GetErrorSleepMs(defaultErrorSleepMs);
             this.Token = token;
         }
+
+        public Task<T> ExecAttempts<T>(Func<T> func, int attempts, int errorSleepMs = -1) => 
+            ExecAttempts(token => func(), attempts, errorSleepMs);
+
+        public Task ExecAttempts(Action action, int attempts, int errorSleepMs = -1) =>
+            ExecAttempts(token => action(), attempts, errorSleepMs);
+
+        public Task<T> Exec<T>(Func<T> func, int errorSleepMs = -1) =>
+            Exec(token => func(), errorSleepMs);
+
+        public Task Exec(Action action, int errorSleepMs = -1) =>
+            Exec(token => action(), errorSleepMs);
 
         /// <exception cref="AttemptsOverException">Task was canceled</exception>
         /// <exception cref="TaskCanceledException">Task was canceled</exception>
