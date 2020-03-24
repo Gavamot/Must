@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Orechov E.O.</Authors>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.1.1</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.2</Version>
   </PropertyGroup>
 
 </Project>

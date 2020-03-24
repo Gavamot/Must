@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 
-namespace ConsoleApp6
+namespace Must
 {
     public class Must
     {

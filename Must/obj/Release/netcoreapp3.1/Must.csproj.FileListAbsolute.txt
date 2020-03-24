@@ -5,4 +5,3 @@ C:\Projects\Must\Must\obj\Release\netcoreapp3.1\Must.AssemblyInfoInputs.cache
 C:\Projects\Must\Must\obj\Release\netcoreapp3.1\Must.AssemblyInfo.cs
 C:\Projects\Must\Must\obj\Release\netcoreapp3.1\Must.dll
 C:\Projects\Must\Must\obj\Release\netcoreapp3.1\Must.pdb
-C:\Projects\Must\Must\obj\Release\netcoreapp3.1\Must.csprojAssemblyReference.cache
